@@ -1,6 +1,7 @@
 import { Hono } from 'hono'
 import { serveStatic } from 'hono/bun'
 import path from "path";
+import { spawn } from 'bun';
 
 const app = new Hono()
 
@@ -23,7 +24,7 @@ app.use('/*', serveStatic({ root: PUBLIC_DIR }))
 app.get('/videos', async (c) => {
   try {
     const files = await Array.fromAsync(
-      new Bun.Glob("*.{mp4,mkv,avi,webm}").scan(VIDEO_DIR)
+      new Bun.Glob("*.{mp4,mkv,avi,webm}").scan(VIDEO_DIR) // MKV doesn't work in iOS Safari. Need to convert mkv to a suitable format. Probably spin up a node for conversion.
     );
     return c.json(files);
   } catch (error) {
@@ -35,12 +36,13 @@ app.get('/videos', async (c) => {
 app.get('/stream/:filename', async (c) => {
   const filename = c.req.param('filename');
   const videoPath = path.join(VIDEO_DIR, filename);
+  const ext = path.extname(videoPath);
 
   // Security check
   if (!videoPath.startsWith(VIDEO_DIR)) {
     return c.text('Forbidden', 403);
   }
-
+  
   try {
     const file = Bun.file(videoPath);
 
@@ -50,7 +52,6 @@ app.get('/stream/:filename', async (c) => {
 
     const range = c.req.header('range');
     const fileSize = file.size;
-    const ext = path.extname(videoPath);
     const contentType = MIME_TYPES[ext] || 'video/mp4';
 
     if (range) {
@@ -83,7 +84,6 @@ app.get('/stream/:filename', async (c) => {
   } catch (error) {
     return c.text('Error streaming video', 500);
   }
-  // how can i stream here?
 })
 
 export default {
