@@ -23,7 +23,10 @@
 
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./apps/web/src/*"],           // React components
+      "@/api/*": ["./apps/api/*"],           // API routes
+      "@/db/*": ["./packages/db/*"],         // Database
+      "@/shared/*": ["./packages/shared/*"]  // Shared utilities
     },
 
     // Some stricter flags (disabled by default)
@@ -31,6 +34,12 @@
     "noUnusedParameters": false,
     "noPropertyAccessFromIndexSignature": false
   },
+
+  "include": [
+    "apps/**/*",
+    "packages/**/*",
+    "styles/**/*"
+  ],
 
   "exclude": ["dist", "node_modules"]
 }
