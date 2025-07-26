@@ -38,7 +38,8 @@
   "include": [
     "apps/**/*",
     "packages/**/*",
-    "styles/**/*"
+    "styles/**/*",
+    "*.config.ts"
   ],
 
   "exclude": ["dist", "node_modules"]

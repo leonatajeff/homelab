@@ -1,17 +1,17 @@
 services:
   postgres:
     image: postgres:17-alpine
-    platform: linux/arm64 # depends
+    platform: linux/arm64
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-homelab}
-      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: homelab
+      POSTGRES_USER: jeff_homelab
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      PGUSER: jeff_homelab          # Add this - sets default user
+      PGDATABASE: homelab           # Add this - sets default database
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-    restart: on-failure:1
 
 volumes:
   postgres_data:

@@ -1,13 +1,6 @@
 import { Hono } from 'hono'
 import { serveStatic } from 'hono/bun'
 import path from "path";
-import postgres from 'postgres';
-import { drizzle } from 'drizzle-orm/postgres-js';
-
-/* const connectionString = process.env.DATABASE_URL || 
-  'postgresql://user:password@localhost:5432/homelab';
-const sql = postgres(connectionString);
-export const db = drizzle(sql); */
 
 const app = new Hono()
 
